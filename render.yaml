@@ -1,0 +1,32 @@
+services:
+  # --- DATABASE ---
+  - type: database
+    name: hybripay-db
+    databaseName: hybripay
+    user: admin
+    plan: free # Can be upgraded to 'starter' for production
+
+  # --- BACKEND API ---
+  - type: web
+    name: hybripay-api
+    env: docker
+    plan: free
+    dockerContext: .
+    dockerfilePath: ./Dockerfile
+    envVars:
+      - key: DATABASE_URL
+        fromDatabase:
+          name: hybripay-db
+          property: connectionString
+      - key: PORT
+        value: 3000
+      - key: NODE_ENV
+        value: production
+      - key: SOLANA_RPC_URL
+        value: https://api.devnet.solana.com
+      - key: USDC_MINT_ADDRESS
+        value: 4zMMC9srt5Ri5X14GAgXhaHii3GnPAEERYPJgZJDncDU
+      - key: TREASURY_DEMO_MODE
+        value: true # Default to true for judge safety
+      - key: TREASURY_PRIVATE_KEY
+        sync: false # You will enter this manually in the Render UI for security
