@@ -1,12 +1,12 @@
-services:
-  # --- DATABASE ---
-  - type: database
-    name: hybripay-db
+# --- DATABASES ---
+databases:
+  - name: hybripay-db
     databaseName: hybripay
     user: admin
-    plan: free # Can be upgraded to 'starter' for production
+    plan: free
 
-  # --- BACKEND API ---
+# --- SERVICES ---
+services:
   - type: web
     name: hybripay-api
     env: docker
@@ -27,6 +27,6 @@ services:
       - key: USDC_MINT_ADDRESS
         value: 4zMMC9srt5Ri5X14GAgXhaHii3GnPAEERYPJgZJDncDU
       - key: TREASURY_DEMO_MODE
-        value: true # Default to true for judge safety
+        value: true
       - key: TREASURY_PRIVATE_KEY
         sync: false # You will enter this manually in the Render UI for security
