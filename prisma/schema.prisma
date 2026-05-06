@@ -1,0 +1,66 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+}
+
+model ApiClient {
+  id         String   @id @default(uuid())
+  name       String   // e.g., "Acme Corp Integration"
+  apiKey     String   @unique
+  role       Role     @default(HR)
+  taxWallet  String?  // Optional tax authority wallet for split routing
+  active     Boolean  @default(true)
+  createdAt  DateTime @default(now())
+}
+
+model Employee {
+  id           String        @id @default(uuid())
+  name         String
+  email        String        @unique
+  bankAccount  String        // Mock bank details
+  solanaWallet String        // Internal custodial wallet address
+  country      String        @default("USA") // USA, Europe, Japan, India
+  taxId        String?       // SSN, PAN, etc.
+  webhookUrl   String?       // URL for payment notifications
+  transactions Transaction[]
+  createdAt    DateTime      @default(now())
+}
+
+model Transaction {
+  id              String    @id @default(uuid())
+  employeeId      String
+  employee        Employee  @relation(fields: [employeeId], references: [id])
+  amountUSD       Decimal   @db.Decimal(10, 2)
+  solanaSignature String?   @unique
+  status          Status    @default(PENDING_APPROVAL)
+  approvalsRequired Int     @default(2)
+  approvalsReceived Int     @default(0)
+  contractVersion String    @default("v1.0.0") // Enterprise lifecycle tracking
+  idempotencyKey  String?   @unique // Prevent duplicate requests
+  failureReason   String?   // Stored when status is FAILED
+  createdAt       DateTime  @default(now())
+  updatedAt       DateTime  @updatedAt
+}
+
+enum Role {
+  HR
+  CEO
+  ADMIN
+}
+
+enum Status {
+  PENDING_APPROVAL
+  PARTIALLY_APPROVED
+  PENDING
+  ON_RAMP_SUCCESS
+  SOLANA_SETTLED
+  OFF_RAMP_SUCCESS
+  COMPLETED
+  FAILED
+}

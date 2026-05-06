@@ -1,0 +1,8 @@
+node_modules
+dist
+.next
+.env
+*.log
+.git
+frontend/node_modules
+frontend/.next
