@@ -75,6 +75,15 @@
   display: grid;
   grid-template-columns: repeat(12, 1fr);
   gap: 1.5rem;
+
+  @media (max-width: 1024px) {
+    grid-template-columns: 1fr;
+    gap: 1rem;
+    
+    & > div {
+      grid-column: span 12 !important;
+    }
+  }
 }
 
 @utility text-gradient {
