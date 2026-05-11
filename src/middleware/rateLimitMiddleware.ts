@@ -1,8 +1,8 @@
 import rateLimit from "express-rate-limit";
 
 export const rateLimitMiddleware = rateLimit({
-  windowMs: parseInt(process.env.RATE_LIMIT_WINDOW_MS || "900000"), // 15 minutes
-  max: parseInt(process.env.RATE_LIMIT_MAX || "100"),
+  windowMs: 15 * 60 * 1000, // 15 minutes
+  max: 1000, // High limit for hackathon demo
   standardHeaders: true,
   legacyHeaders: false,
   message: {
